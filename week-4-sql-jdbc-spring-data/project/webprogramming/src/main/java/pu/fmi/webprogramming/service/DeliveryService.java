@@ -99,43 +99,35 @@ public class DeliveryService implements DeliveryServiceInterface {
   @Override
   public List<Delivery> getDeliveriesBy(DeliveryFilter filter) {
 
-    // TODO: Довършване на имплементацията на метода
-    // (използвайте логика за филтриране, pagination и сортиране)
+    String sortField = (filter.getSortBy() != null && !filter.getSortBy().isBlank())
+            ? filter.getSortBy()
+            : "createdAt";
 
-    // * Създай Pageable обект от подадения филтър:
-    //    → page (номер на страница)
-    //    → size (размер на страница)
-    //    * Създайте Sort обект oт подадените във филтъра:
-    //        → sortBy (поле за сортиране) - ако не е подадено, то по подразбиране трябва да е createdBy
-    //        → direction (asc / desc) - ако не е подадено, то по подразбиране трябва да е низходящо
+    Sort.Direction sortDirection = (filter.getDirection() != null
+            && filter.getDirection().equalsIgnoreCase("asc"))
+            ? Sort.Direction.ASC
+            : Sort.Direction.DESC;
 
-    // * Имайте предвид всички възможни случаи за филтриране:
-    //    → Ако няма подадени филтри (status и customerId са null):
-    //       - върни всички доставки
-    //    → Ако е подаден само customerId:
-    //       - върни доставки само за този клиент
-    //    → Ако е подаден само status:
-    //       - върни доставки само със съответния статус
-    //    → Ако са подадени и двата филтъра:
-    //       - върни доставки, които отговарят едновременно на status и customerId
+    Sort sort = Sort.by(sortDirection, sortField);
+    Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize(), sort);
 
-    // * Уверите се, че резултатът винаги е ограничен чрез Pageable
-    // * Уверите се, че резултатът е сортиран според подадения sortBy и direction
-    // * Методът трябва да връща само списък (List<Delivery>), без Page обект
+    boolean hasStatus     = filter.getStatus() != null;
+    boolean hasCustomerId = filter.getCustomerId() != null;
 
-    // ВАЖНО:
-    // * Всички предоставени Unit тестове (GetDeliveriesByDeliveryApiTest) трябва да минават успешно
-    // * Не променяйте сигнатурата на метода
-    // * Не променяй поведението на API-то
+    if (!hasStatus && !hasCustomerId) {
+      return deliveryRepository.findAll(pageable).getContent();
+    }
 
-    Sort sort = null;
-    Pageable pageable = PageRequest.of(-1, -1, sort);
-
-    if (filter.getStatus() != null && filter.getCustomerId() == null) {
+    if (hasStatus && !hasCustomerId) {
       return deliveryRepository.findByDeliveryStatus(filter.getStatus(), pageable);
     }
 
-    return null;
+    if (!hasStatus) {
+      return deliveryRepository.findByCustomerId(filter.getCustomerId(), pageable);
+    }
+
+    return deliveryRepository.findByDeliveryStatusAndCustomerId(
+            filter.getStatus(), filter.getCustomerId(), pageable);
   }
 
   @Override
@@ -174,11 +166,7 @@ public class DeliveryService implements DeliveryServiceInterface {
     if (IN_PROGRESS.equals(currentStatus) && DELIVERED.equals(newStatus)) {
       return true;
     }
-    if ((CREATED.equals(currentStatus) || ASSIGNED.equals(currentStatus))
-        && CANCELED.equals(newStatus)) {
-      return true;
-    }
-
-    return false;
+      return (CREATED.equals(currentStatus) || ASSIGNED.equals(currentStatus))
+              && CANCELED.equals(newStatus);
   }
 }
