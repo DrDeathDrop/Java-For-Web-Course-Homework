@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Delivery Management System</title>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/createDelivery}">Create Delivery</a>
+                <a th:href="@{/getDeliveries}">Get All Deliveries</a>
+            </nav>
+        </header>
+        <h2>Welcome to Delivery Management System</h2>
+        <p th:text="${message}"></p>
+    </body>
+</html>

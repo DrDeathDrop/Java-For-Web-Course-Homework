@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>All Current Deliveries</title>
+    </head>
+    <body>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Create Date</th>
+                        <th>Customer</th>
+                        <th>Courier</th>
+                        <th>Warehouse</th>
+                        <th>Delivery Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="delivery : ${deliveries}">
+                        <td th:text="${delivery.id}" ></td>
+                        <td th:text="${#temporals.format(delivery.createdAt, 'dd/MMM/yyyy HH:mm')}"></td>
+                        <td th:text="${delivery.customer.firstName}"></td>
+                        <td th:text="${delivery.courier.firstName}"></td>
+                        <td th:text="${delivery.warehouse.city}"></td>
+                        <td th:text="${delivery.deliveredAt}"></td>
+                        <td th:text="${delivery.deliveryStatus}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

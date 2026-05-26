@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Delivery Info</title>
+    </head>
+    <body>
+        <div>
+            <span>Delivery is created</span>
+        </div>
+        <div>
+            <span>Delivery Id</span>
+            <span th:text="${delivery.id}"></span>
+        </div>
+        <div>
+            <span>Customer</span>
+            <span th:text="${delivery.customer.firstName}"></span>
+        </div>
+    </body>
+</html>

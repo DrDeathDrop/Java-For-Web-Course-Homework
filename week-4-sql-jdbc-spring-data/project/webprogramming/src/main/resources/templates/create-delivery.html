@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Create Delivery Form</title>
+    </head>
+    <body>
+        <div>
+            <form th:action="@{/createDelivery}" method="POST">
+                <div>
+                    <span>Customers</span>
+                </div>
+                <div>
+                    <select name="customerId">
+                        <option>Select Customer</option>
+                        <option th:each="customer : ${customers}"
+                                th:value="${customer.id}"
+                                th:text="${customer.firstName + ' ' + customer.lastName}">
+                        </option>
+                    </select>
+                </div>
+                <button type="submit">Create Delivery</button>
+            </form>
+        </div>
+    </body>
+</html>

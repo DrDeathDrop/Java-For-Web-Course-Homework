@@ -1,0 +1,6 @@
+2026-05-22 10:16:36.438222+03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DELIVERY" not found; SQL statement:
+DROP TABLE DELIVERY [42102-240]
+2026-05-22 10:16:44.251423+03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DELIVERY" not found; SQL statement:
+DROP TABLE DELIVERY [42102-240]
